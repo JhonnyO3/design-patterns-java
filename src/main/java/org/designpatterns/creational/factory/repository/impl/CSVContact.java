@@ -1,7 +1,7 @@
-package org.designpatterns.creational.factory.repository;
+package org.designpatterns.creational.factory.repository.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.designpatterns.creational.factory.contact.Contact;
+import org.designpatterns.creational.factory.repository.IContact;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,20 +9,16 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactRepository {
+public class CSVContact implements IContact {
 
-    public List<Contact> getContactsFromJson(String filePath) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(getClass().getClassLoader().getResourceAsStream(filePath),
-                    objectMapper.getTypeFactory().constructCollectionType(List.class, Contact.class));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
+    private String filePath;
+
+    public CSVContact(String filePath) {
+        this.filePath = filePath;
     }
 
-    public List<Contact> getContactsFromCsv(String filePath) {
+    @Override
+    public List<Contact> getContacts() {
         List<Contact> contacts = new ArrayList<>();
         try {
             List<String> lines = Files.readAllLines(Path.of(filePath));
